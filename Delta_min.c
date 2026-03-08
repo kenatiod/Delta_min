@@ -7,7 +7,7 @@
  * significance of these two values is that delta = Pidx - omega gives the count of
  * missing prime divisors so when those are equal, there are no missiong prime divisors
  * in the set from 2 all the way to the greatest prime divisor, i.e. the number is
- * pi-complete.
+ * prime-complete.
  *
  * The program uses multiple parallel CPU threads, and each thread computes the
  * omega(n(n+1)) by adding omega(n)+omega(n+1) because n and (n+1) are coprime. To
@@ -30,7 +30,7 @@
  * will resume automatically from where it left off. The checkpoint file is
  * removed on successful completion.
  *
- * Compile: gcc-15 -O3 -march=native -fopenmp -o Delta_min Delta_min.c -lm
+ * Compile: gcc -O3 -march=native -fopenmp -o Delta_min Delta_min.c -lm
  *
  * By Ken Clements Feb 10, 2026
  */
@@ -42,37 +42,14 @@
 #include <omp.h>
 #include <math.h>
 
-#define MAX_PRIMES 256
+
 #define CHECKPOINT_FILE "delta_min_checkpoint.dat"
 
-static uint64_t primes[MAX_PRIMES + 1];
-static int num_primes = 0;
+static uint64_t primes[31] = {0, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113};
+static int primes_length = 30;
 
 /* Shared pruning variable for the current interval */
 volatile int g_min_delta = 999999;
-
-static int is_prime_test(uint64_t n) {
-    if (n < 2) return 0;
-    if (n < 4) return 1;
-    if (n % 2 == 0 || n % 3 == 0) return 0;
-    for (uint64_t d = 5; d * d <= n; d += 6) {
-        if (n % d == 0 || n % (d + 2) == 0) return 0;
-    }
-    return 1;
-}
-
-static void build_prime_table(int count) {
-    num_primes = 0;
-    primes[0] = 0;
-    uint64_t c = 2;
-    while (num_primes < count) {
-        if (is_prime_test(c)) {
-            num_primes++;
-            primes[num_primes] = c;
-        }
-        c++;
-    }
-}
 
 /*
  * Compute Pidx and omega for a single integer.
@@ -209,47 +186,7 @@ static int read_checkpoint(uint64_t orig_interval_start, uint64_t orig_initial_s
     return 1;
 }
 
-/* ---- Per-interval max_pidx cap via primorial lookup ---- */
 
-/*
- * The k-th primorial p_k# is the product of the first k primes.
- * For a single integer n, omega(n) <= k only when p_k# <= n.
- * Therefore, for any n in [n_start, n_stop], the maximum achievable
- * omega is the largest k where p_k# <= n_stop.  Checking primes beyond
- * that index wastes time on factorizations that cannot contribute to
- * max_omega, min_pidx, or min_delta for this interval.
- *
- * p_16# overflows uint64_t, so the table covers k = 1..15 and the
- * bound is naturally capped at 15 for any uint64_t value of n_stop.
- */
-static const uint64_t primorials[16] = {
-    0ULL,                     /* index 0 unused */
-    2ULL,                     /* p_1#  = 2 */
-    6ULL,                     /* p_2#  = 2·3 */
-    30ULL,                    /* p_3#  = 2·3·5 */
-    210ULL,                   /* p_4#  = 2·3·5·7 */
-    2310ULL,                  /* p_5#  = ····11 */
-    30030ULL,                 /* p_6#  = ····13 */
-    510510ULL,                /* p_7#  = ····17 */
-    9699690ULL,               /* p_8#  = ····19 */
-    223092870ULL,             /* p_9#  = ····23 */
-    6469693230ULL,            /* p_10# = ····29 */
-    200560490130ULL,          /* p_11# = ····31 */
-    7420738134810ULL,         /* p_12# = ····37 */
-    304250263527210ULL,       /* p_13# = ····41 */
-    13082761331670030ULL,     /* p_14# = ····43 */
-    614889782588491410ULL,    /* p_15# = ····47 */
-};
-
-/* Return the largest k (1..15) such that primorials[k] <= n, or 1 if n < 2. */
-static int omega_bound(uint64_t n) {
-    int k = 1;
-    for (int i = 2; i <= 15; i++) {
-        if (primorials[i] <= n) k = i;
-        else break;
-    }
-    return k;
-}
 
 /* Per-thread result for reduction */
 typedef struct {
@@ -276,16 +213,12 @@ int main(int argc, char *argv[]) {
     if (argc > 3) intervals = atoi(argv[3]);
     if (argc > 4) max_pidx = atoi(argv[4]);
 
+    if (max_pidx > primes_length) max_pidx = primes_length;
+
     /* Save original command-line params for checkpoint validation */
     uint64_t orig_interval_start = interval_start;
     uint64_t orig_initial_size   = interval_size;
     int      orig_intervals      = intervals;
-
-    int table_size = max_pidx + 50;
-    if (table_size > MAX_PRIMES) table_size = MAX_PRIMES;
-    build_prime_table(table_size);
-
-    if (max_pidx > num_primes) max_pidx = num_primes;
 
     /* Check for a checkpoint from a previous interrupted run */
     int resuming = 0;
@@ -363,14 +296,6 @@ int main(int argc, char *argv[]) {
         n_stop = n_start + interval_size;
         interval_size *= 2;
 
-        /* Tighten the prime search limit to what is actually achievable for
-         * individual n <= n_stop.  omega(n) cannot exceed k where p_k# <= n_stop,
-         * so there is no point checking primes beyond index k.  This replaces
-         * max_pidx as the hard ceiling for this interval; g_min_delta+22 pruning
-         * still tightens the limit further on a per-n basis as the interval runs. */
-        int eff_max_pidx = omega_bound(n_stop);
-        if (eff_max_pidx > max_pidx) eff_max_pidx = max_pidx;
-
         double t0 = omp_get_wtime();
         g_min_delta = 999999;
 
@@ -390,20 +315,16 @@ int main(int argc, char *argv[]) {
 
 
             int p1 = 0, o1 = 0;
-            if (!find_pidx_omega(n_start, eff_max_pidx, &p1, &o1)){
+            if (!find_pidx_omega(n_start, max_pidx, &p1, &o1)){
                 p1 = 9999999;
                 o1 = 0;
             }
             #pragma omp for schedule(dynamic, 65536)
             for (uint64_t n = n_start+1; n <= n_stop; n++) {
 
-                // Dynamic Pruning
-                int current_best = g_min_delta;
-                int limit = current_best + 22;
-                if (limit > eff_max_pidx) limit = eff_max_pidx;
 
                 int p2 = 0, o2 = 0;
-                if (find_pidx_omega(n, limit, &p2, &o2)) {
+                if (find_pidx_omega(n, max_pidx, &p2, &o2)) {
 
                     int pidx = (p1 > p2) ? p1 : p2;
                     int omega = o1 + o2;
