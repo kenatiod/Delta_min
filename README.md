@@ -1,16 +1,16 @@
 # Delta_min
 
-Number theory research program by Ken Clements (Feb 10, 2026).
+Number theory research program by Ken Clements (March 8, 2026).
 
 ## Overview
 
-This program investigates the **pi-complete** property of consecutive integer products `n(n+1)`. For each `n`, it computes:
+This program investigates the **prime-complete** property of consecutive integer products `n(n+1)`. For each `n`, it computes:
 
 - **omega** — the number of distinct prime divisors of `n(n+1)`
 - **Pidx** — the prime index of the greatest prime divisor of `n(n+1)`
 - **delta = Pidx − omega** — the count of "missing" prime divisors between 2 and the greatest prime divisor
 
-When `delta = 0`, the product `n(n+1)` has no missing prime divisors in the sequence from 2 up to its greatest prime factor — i.e., the number is **pi-complete**.
+When `delta = 0`, the product `n(n+1)` has no missing prime divisors in the sequence from 2 up to its greatest prime factor — i.e., the number is **prime-complete**.
 
 The search is conducted over doubling intervals of powers of 2, tracking the minimum delta, maximum omega, and minimum Pidx found in each interval.
 
@@ -29,7 +29,7 @@ Uses OpenMP for multi-threaded parallel search with dynamic scheduling. Results 
 ## Build
 
 ```bash
-gcc -O3 -march=native -fopenmp -o Delta_min Delta_min.c -lm
+gcc-15 -O3 -march=native -fopenmp -o Delta_min Delta_min.c -lm
 ```
 
 ## Usage
