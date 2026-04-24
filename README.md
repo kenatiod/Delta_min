@@ -62,8 +62,8 @@ For each interval, the program prints:
 - Minimum delta found (and the `n`, Pidx, omega at that minimum)
 - Maximum omega found (and the `n`)
 - Minimum Pidx found (and the `n`)
-- Factoring routine statistics
-- Wall-clock time for the interval
+- Factoring routine statistics (if verbose)
+- Wall-clock time for the interval (if verbose)
 
 A CSV file `delta_min_data.csv` is also written with the full results and a checkpoint file is also written so the program can be restarted at the start of the unfinished interval.
 
