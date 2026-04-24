@@ -516,9 +516,10 @@ for the interval.
 int main(int argc, char *argv[]) {
     uint64_t interval_start = 1;
     uint64_t interval_size = 1;
-    int intervals = 46;
+    int intervals = 40;
     int max_pidx = 100;
     int margin = 3;
+    int verbose = 0;
     uint64_t block_n = DEFAULT_BLOCK_N;
 
     if (argc > 1) interval_start = strtoull(argv[1], NULL, 10);
@@ -527,7 +528,10 @@ int main(int argc, char *argv[]) {
     if (argc > 4) max_pidx = atoi(argv[4]);
     if (argc > 5) margin = atoi(argv[5]);
     if (argc > 6) block_n = strtoull(argv[6], NULL, 10);
+    if (argc > 7) verbose = atoi(argv[5]);
 
+    if (intervals < 1) intervals = 1;
+    if (interval_start == 1 && interval_size == 1 && intervals > 1) intervals++;
     if (max_pidx > primes_length) max_pidx = primes_length;
     if (max_pidx < 1) max_pidx = 1;
     if (margin < 0) margin = 0;
@@ -557,20 +561,25 @@ int main(int argc, char *argv[]) {
     char buf1[64];
 
     printf("\nDelta_min: Calculating the smallest difference between the prime number index of the greatest prime divisor\n");
-    printf("     of n(n+1) and the count of prime divisors of that consecutive integer product, over intervals of n.\n");
+    printf("     of n(n+1) and the count of prime divisors of that consecutive integer product, over intervals of 2 x n.\n");
     printf("===============================================================================================================\n\n");
     if (resuming) {
         printf("*** Resuming from checkpoint: starting at loop interval %d, n = %llu ***\n\n",
                first_interval, (unsigned long long)resume_n_stop);
     }
     printf("Tracking: max(omega) if full factorization, exact min(Pidx), and exact min(Pidx-omega) per interval.\n");
-    printf("Intervals: %d doubling, initial size %s\n", orig_intervals,
+    printf("Intervals: %d, initial size %s\n", orig_intervals,
            fmt_num_u64(orig_initial_size, buf1, sizeof(buf1)));
     printf("Threads: %d, max prime index: %d (p_%d = %llu), margin: %d, block_n: %llu\n\n",
            nthreads, max_pidx, max_pidx, (unsigned long long)primes[max_pidx],
            margin, (unsigned long long)block_n);
-    printf("            Interval Start  minDelta = Pidx - omega      n@minDelta  maxOmega      n@maxOmega  minPidx        n@minPidx    nearPairs  primeChk   rhoCalls  deepFact   time\n");
-    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    if (verbose) {
+        printf("            Interval Start  minDelta = Pidx - omega      n@minDelta  maxOmega      n@maxOmega  minPidx        n@minPidx    nearPairs  primeChk   rhoCalls  deepFact   time\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    } else {
+        printf("            Interval Start  minDelta = Pidx - omega      n@minDelta  maxOmega      n@maxOmega  minPidx        n@minPidx \n");
+        printf("---------------------------------------------------------------------------------------------------------------------------\n");
+    }
     fflush(stdout);
 
     uint64_t n_stop = 0;
@@ -579,7 +588,11 @@ int main(int argc, char *argv[]) {
         n_stop = resume_n_stop;
     } else {
         if (orig_interval_start == 1 && orig_initial_size == 1) { // This is a special printout for the case of an interval of 1 number starting at 1.
-            printf("                         1         0     1     1                  1      1                  1      1                  1           0         0         0         0    0.00s\n");
+            if (verbose) {
+                printf("                         1         0     1     1                  1      1                  1      1                  1           0         0         0         0    0.00s\n");
+            } else {
+                printf("                         1         0     1     1                  1      1                  1      1                  1  \n");
+            }
             first_interval = 1;
             interval_start = 2;
             interval_size = 2;
@@ -602,7 +615,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    for (int interval = first_interval; interval < intervals; interval++) {
+    for (int interval = first_interval; interval <= intervals; interval++) {
         uint64_t n_start = (interval == 0) ? interval_start : n_stop;
         n_stop = n_start + interval_size;
         interval_size *= 2;
@@ -750,8 +763,8 @@ int main(int argc, char *argv[]) {
         fmt_num_u64(best.mo_n, mo_str, sizeof(mo_str));
         fmt_num_u64(best.mp_n, mp_str, sizeof(mp_str));
         fmt_time(dt, time_str, sizeof(time_str));
-
-        printf("%26s %9d %5d %5d %18s %6d %18s %6d %18s %11llu %9llu %9llu %9llu %8s\n",
+        if (verbose) {
+            printf("%26s %9d %5d %5d %18s %6d %18s %6d %18s %11llu %9llu %9llu %9llu %8s\n",
                start_str,
                best.min_delta == SENTINEL_PIDX ? 9999 : best.min_delta,
                best.md_pidx,
@@ -766,6 +779,18 @@ int main(int argc, char *argv[]) {
                (unsigned long long)best.rho_calls,
                (unsigned long long)best.full_factor_calls,
                time_str);
+         } else {
+            printf("%26s %9d %5d %5d %18s %6d %18s %6d %18s\n",
+               start_str,
+               best.min_delta == SENTINEL_PIDX ? 9999 : best.min_delta,
+               best.md_pidx,
+               best.md_omega,
+               md_str,
+               best.max_omega,
+               mo_str,
+               best.min_pidx == SENTINEL_PIDX ? 9999 : best.min_pidx,
+               mp_str);
+         }
         fflush(stdout);
 
         if (csv) {
