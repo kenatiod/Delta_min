@@ -79,6 +79,8 @@ This limit on maximum omega is useful because if, for intervals between the squa
 
 The program can we used to find the list of the last n values for each minimum delta. The default run shows the last minimum=0 at n = 633,555, last minimum=1 at n = 80,061,344 and last minimum=2 at n = 1,109,496,723,125. However, no minimum=3 appears after minimum=2. This is because the minimum=3 location is between the minimum=2 location and the end of the interval, so it is overshadowed by minimum=2. To find the true minimum=3 value, the interval must be re-calculated starting right after the minimum=2 location and through to the end of the interval. When this is done, the true last minimum=3 value is found at n = 1,284,729,638,049.
 
+See the file "Delta_min_Heuristic_Case.md" for a more detailed explanation, and the file "Delta_min_output.txt" for an output example to n = 150 trillion.
+
 ## License
 
 MIT License — see [LICENSE](LICENSE).
