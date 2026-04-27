@@ -1,7 +1,8 @@
 // Delta_min.c
 
 /*
-Version 2.1
+Version 2.2
+
 This program goes through doubling intervals of n and computes the delta of
 omega (number of prime divisors) and pi(GPF) of the product n(n+1). 
 The prime index of the greatest prime factor, pi(GPF), is called the "Pidx"
@@ -71,14 +72,18 @@ integer. For example, if given the integer n = 123,456,789 we see that the first
 greater than n is at p_9# = 223,092,870 so omega(n) < 9. In this case the Pidx(n) is well
 above 9 (it's 529), so we do not need to know the exact omega(n) to know it is not prime-complete.
 
+At the start of the main routine the variable "verbose" is currently turned off. Set it
+to 1 to add statistic details to the printout.
+
 On Linux, compile with:
-gcc -O3 -std=c11 -fopenmp -o Delta_min Delta_min.c -lm
+    gcc -O3 -std=c11 -fopenmp -o Delta_min Delta_min.c -lm
 
 On Mac, I use:
-gcc-15 -O3 -std=c11 -fopenmp -o Delta_min Delta_min.c -lm
+    gcc-15 -O3 -std=c11 -fopenmp -o Delta_min Delta_min.c -lm
+
 but you may need:
-brew install libomp
-clang -O3 -std=c11 -Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -o Delta_min Delta_min.c -L/opt/homebrew/opt/libomp/lib -lomp -lm
+    brew install libomp
+    clang -O3 -std=c11 -Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -o Delta_min Delta_min.c -L/opt/homebrew/opt/libomp/lib -lomp -lm
 
 You can run it as:
     ./Delta_min                         (starts at 1, runs 46 intervals, uses the first 100 prime divisors )
@@ -336,7 +341,6 @@ static po_result_t find_po_residue(uint64_t n, int limit_idx) {
 
     for (int i = 1; i <= limit_idx; i++) {
         uint64_t p = primes[i];
-        if (p > out.residue) break;
         if (out.residue % p == 0) {
             out.omega_small++;
             out.pidx_small = i;
@@ -516,10 +520,10 @@ for the interval.
 int main(int argc, char *argv[]) {
     uint64_t interval_start = 1;
     uint64_t interval_size = 1;
-    int intervals = 40;
+    int intervals = 39; // Produces 40
     int max_pidx = 100;
     int margin = 3;
-    int verbose = 0;
+    int verbose = 0; // Set this to 1 to get stats in the printiout
     uint64_t block_n = DEFAULT_BLOCK_N;
 
     if (argc > 1) interval_start = strtoull(argv[1], NULL, 10);
@@ -568,7 +572,9 @@ int main(int argc, char *argv[]) {
                first_interval, (unsigned long long)resume_n_stop);
     }
     printf("Tracking: max(omega) if full factorization, exact min(Pidx), and exact min(Pidx-omega) per interval.\n");
-    printf("Intervals: %d, initial size %s\n", orig_intervals,
+    int print_intervals = orig_intervals;
+    if (print_intervals > 1) print_intervals--;
+    printf("Intervals: %d, initial size %s\n", print_intervals,
            fmt_num_u64(orig_initial_size, buf1, sizeof(buf1)));
     printf("Threads: %d, max prime index: %d (p_%d = %llu), margin: %d, block_n: %llu\n\n",
            nthreads, max_pidx, max_pidx, (unsigned long long)primes[max_pidx],
@@ -615,7 +621,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    for (int interval = first_interval; interval <= intervals; interval++) {
+    for (int interval = first_interval; interval < intervals; interval++) {
         uint64_t n_start = (interval == 0) ? interval_start : n_stop;
         n_stop = n_start + interval_size;
         interval_size *= 2;
