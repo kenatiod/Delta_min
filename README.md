@@ -53,7 +53,9 @@ To sample a single trillion wide interval starting at 100 trillion:
 ```bash
 ./Delta_min 100000000000000 1000000000000 1 100
 ```
-A Mac Mini will get through a trillion products in about four hours.
+A Mac Mini will get through a trillion products in about four hours, 
+depending on the max_Pidx setting. An internal flag, "verbose" can be set in
+the source code prior to build to provide detailed output.
 
 ## Output
 
