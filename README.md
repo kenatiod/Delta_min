@@ -1,6 +1,6 @@
 # Delta_min
 
-Number theory research program by Ken Clements (Started: February 10, 2026, last revised April 22, 2026).
+Number theory research program by Ken Clements (Started: February 10, 2026, last revised April 27, 2026).
 
 ## Overview
 
@@ -43,11 +43,11 @@ clang -O3 -std=c11 -Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -o
 ./Delta_min [interval_start] [interval_initial_size] [number_of_intervals] [max_Pidx]
 ```
 
-**Defaults:** start=1, initial size=1, 46 intervals, max Pidx=100
+**Defaults:** start=1, initial size=1, 40 intervals, max Pidx=100
 
 **Example:**
 ```bash
-./Delta_min 1 1 46 100
+./Delta_min 1 1 40 100
 ```
 To sample a single trillion wide interval starting at 100 trillion:
 ```bash
@@ -71,17 +71,17 @@ A CSV file `delta_min_data.csv` is also written with the full results and a chec
 
 ## Background
 
-The primorial `p_r#` is the product of the first `r` primes. For example, with `max_pidx = 30`, the program can correctly cover `n(n+1)` up to `p_30#`=
+The primorial `P_r` is the product of the first `r` primes. For example, with `max_pidx = 30`, the program can correctly cover `n(n+1)` up to `P_30`=
 
 ```
 31,610,054,640,417,607,788,145,206,291,543,662,493,274,686,990
 ```
-For any number, k, omega(k) cannot exceed r, where p_r# is the first primorial greater than or equal to k. If we apply this principle to n(n+1), as n increases the product will exceed the values of primorials at about n = the square root of the primorial, because for large numbers n(n+1) is almost exactly n^2. This tells us that if n is less than sqrt(p_r#), then omega(n(n+1)) is less than r.
+For any number, k, omega(k) cannot exceed r, where P_r is the first primorial greater than or equal to k. If we apply this principle to n(n+1), as n increases the product will exceed the values of primorials at about n = the square root of the primorial, because for large numbers n(n+1) is almost exactly n^2. This tells us that if n is less than sqrt(P_r), then omega(n(n+1)) is less than r.
 This limit on maximum omega is useful because if, for intervals between the square roots of primorials, the minimum Pidx(n(n+1)) is greater than r, then it is not possible for any n(n+1) in the interval to be prime-complete. When numbers are large enough such that the minimum Pidx(n(n+1)) over all subsequent intervals between primorial square roots is greater than each corresponding r, there is no possibility to find another prime-complete product.
 
-The program can we used to find the list of the last n values for each minimum delta. The default run shows the last minimum=0 at n = 633,555, last minimum=1 at n = 80,061,344 and last minimum=2 at n = 1,109,496,723,125. However, no minimum=3 appears after minimum=2. This is because the minimum=3 location is between the minimum=2 location and the end of the interval, so it is overshadowed by minimum=2. To find the true minimum=3 value, the interval must be re-calculated starting right after the minimum=2 location and through to the end of the interval. When this is done, the true last minimum=3 value is found at n = 1,284,729,638,049.
+The program can we used to find the list of the last n values for each minimum delta. The default run shows the last minimum=0 at n = 633,555, last minimum=1 at n = 80,061,344 and last minimum=2 at n = 1,109,496,723,125. However, no minimum=3 appears after minimum=2. This is because the minimum=3 location is between the minimum=2 location and the end of the interval, so it is overshadowed by minimum=2. To find the true minimum=3 value, the interval must be re-calculated starting right after the minimum=2 location and through to the end of the interval. When this is done, the true last minimum=3 value is found at n = 1,284,729,638,049. Minimum=4 is at 20,628,591,204,480.
 
-See the file "Delta_min_Heuristic_Case.md" for a more detailed explanation, and the file "Delta_min_output.txt" for an output example to n = 150 trillion.
+See the file "Delta_min_Heuristic_Case.md" for a more detailed explanation, and the file "Delta_min_output.txt" for an output example to n = 158 trillion.
 
 ## License
 
