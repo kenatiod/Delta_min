@@ -520,7 +520,7 @@ for the interval.
 int main(int argc, char *argv[]) {
     uint64_t interval_start = 1;
     uint64_t interval_size = 1;
-    int intervals = 39; // Produces 40
+    int intervals = 40;
     int max_pidx = 100;
     int margin = 3;
     int verbose = 0; // Set this to 1 to get stats in the printiout
