@@ -214,13 +214,16 @@ Størmer’s theorem supplies the natural finite-reduction framework for the for
 terms, fixed-r prime-complete candidates may be searched through Pell-equation families. 
 
 The heuristic in this note explains why those families should eventually become empty; 
-the formal proof must show that they do. Størmer is key, here. Whereas from Dickman we know that given
-any $p_r$-smooth number, there is, eventually, going to be a greater number that is just as smooth, 
-from Størmer we know that given a consecutive pair, $n$ and $(n+1)$, there is no gaurentee that a
-greater pair exist just as smooth. Because the set of such pairs is finite, Størmer tell us that for 
+the formal proof must show that they do, and exactly where. Størmer's theorem is key, here. 
+Whereas from Dickman we know that given any $p_r$-smooth number, there is, eventually, 
+going to be a greater number that is just as smooth, from Størmer we know that given 
+a consecutive pair, $n$ and $(n+1)$, there is no gaurentee that a greater pair exist 
+that are just as smooth. Because the set of such pairs is finite, Størmer tells us that for 
 every $r$ there must be a maximum pair of consecutive integers that are both $p_r$-smooth. That means 
 that for any given interval there has to be a minimum value of Pidx, below which, no consecutive integer
-pair can go. For intervals chosen such that the minimum Pidx is greater than the $r$ of the primorial
+pair can go. Or stated another way, if the interval starts after that last $p_r$-smooth pair,
+the no pair in the interval can be $p_r-smooth$ for that, or any lesser value of $r$.
+For intervals chosen such that the minimum Pidx is greater than the $r$ of the primorial
 boundary, there can be no prime-complete products $n(n+1)$.
 
 ## 8. Summary
