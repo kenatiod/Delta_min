@@ -94,12 +94,13 @@ bound for ω throughout the interval.
 
 ## 4. What the computation measures
 
-The program primorial_maxO_minP.c searches intervals determined by primorial-root 
-boundaries and records, among other diagnostics, $minPidx(N_2(n))$ within each interval.
+The program Delta_min.c searches intervals and records, among other diagnostics, $minPidx(N_2(n))$ 
+within each interval. It tracks the difference,Pidx - omega, for each value showing the progression of
+the smallest of this delta over the intervals.
 
 The column maxOmega is useful diagnostic information, but it is not the main mathematical certificate. 
 If factorization is deliberately limited, then the measured maxOmega may be incomplete. The primorial 
-argument avoids this difficulty: the decisive comparison is not $minPidx>maxω,$ but rather $minPidx>r.$ 
+argument avoids this difficulty: the decisive comparison is not $minPidx>maxOmega,$ but rather $minPidx>r.$ 
 That comparison uses the exact primorial barrier $ω(N_2(n))≤r$ for the interval.
 
 The computation is reliable for detecting any possible counterexample with $Pidx≤r,$ provided the trial 
