@@ -94,7 +94,7 @@ bound for ω throughout the interval.
 
 ## 4. What the computation measures
 
-The program Delta_min.c ([available here](https://github.com/kenatiod/Delta_min/Delta_min.c)) 
+The program Delta_min.c ([available here](https://github.com/kenatiod/Delta_min/blob/main/Delta_min.c)) 
 searches intervals and records, among other diagnostics, $minPidx(N_2(n))$ 
 within each interval. It tracks the difference, Pidx - omega, for each value showing the progression of
 the smallest of this delta over the intervals.
