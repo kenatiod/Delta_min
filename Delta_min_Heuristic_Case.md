@@ -94,7 +94,8 @@ bound for ω throughout the interval.
 
 ## 4. What the computation measures
 
-The program Delta_min.c searches intervals and records, among other diagnostics, $minPidx(N_2(n))$ 
+The program Delta_min.c ([available here](https://github.com/kenatiod/Delta_min/Delta_min.c)) 
+searches intervals and records, among other diagnostics, $minPidx(N_2(n))$ 
 within each interval. It tracks the difference, Pidx - omega, for each value showing the progression of
 the smallest of this delta over the intervals.
 
@@ -213,7 +214,14 @@ Størmer’s theorem supplies the natural finite-reduction framework for the for
 terms, fixed-r prime-complete candidates may be searched through Pell-equation families. 
 
 The heuristic in this note explains why those families should eventually become empty; 
-the formal proof must show that they do.
+the formal proof must show that they do. Størmer is key, here. Whereas from Dickman we know that given
+any $p_r$-smooth number, there is, eventually, going to be a greater number that is just as smooth, 
+from Størmer we know that given a consecutive pair, $n$ and $(n+1)$, there is no gaurentee that a
+greater pair exist just as smooth. Because the set of such pairs is finite, Størmer tell us that for 
+every $r$ there must be a maximum pair of consecutive integers that are both $p_r$-smooth. That means 
+that for any given interval there has to be a minimum value of Pidx, below which, no consecutive integer
+pair can go. For intervals chosen such that the minimum Pidx is greater than the $r$ of the primorial
+boundary, there can be no prime-complete products $n(n+1)$.
 
 ## 8. Summary
 
@@ -239,7 +247,7 @@ The reason finiteness is expected is that r grows only on the scale
 $$ \frac{2\log n}{\log(\log(n))}, $$
 
 while smooth-number heuristics and computation suggest that the least possible greatest-prime-factor index in these 
-intervals grows on a much larger scale, roughly
+intervals grows at a much higher rate, roughly as
 
 $$ \frac{(\log(n))^2}{2\log(\log(n))}. $$
 
