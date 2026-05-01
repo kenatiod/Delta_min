@@ -95,7 +95,7 @@ bound for ω throughout the interval.
 ## 4. What the computation measures
 
 The program Delta_min.c searches intervals and records, among other diagnostics, $minPidx(N_2(n))$ 
-within each interval. It tracks the difference,Pidx - omega, for each value showing the progression of
+within each interval. It tracks the difference, Pidx - omega, for each value showing the progression of
 the smallest of this delta over the intervals.
 
 The column maxOmega is useful diagnostic information, but it is not the main mathematical certificate. 
@@ -110,7 +110,7 @@ over the first $r$ primes and would be detected by such a search.
 
 
 
-## 5. Why $Pidx$ is expected to outrun $r$
+## 5. Why Pidx is expected to outrun $r$
 
 The primorial barrier gives the structural ceiling: $ω(N_2)≤r$ when $N_2<P_{r+1}.$ 
 
