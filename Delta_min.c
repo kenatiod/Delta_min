@@ -90,7 +90,7 @@ but you may need:
 
 You can run it as:
     ./Delta_min                         (starts at 1, runs 40 intervals, uses the first 100 prime divisors )
-    ./Delta_min  1000 1000 20 30        (starts at 1000, runs 20 doublings of size starting at 1000, uses 20 primes )
+    ./Delta_min  1000 1000 20 30        (starts at 1000, runs 20 doublings of size starting at 1000, uses 30 primes )
     ./Delta_min  10000000000000 1000000000000  1  300   (starts at 10T, runs 1 interval of size 1T, uses the first 300 prime divisors )
 
 By Ken Clements, April 10, 2026
