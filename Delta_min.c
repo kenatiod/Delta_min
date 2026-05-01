@@ -1,10 +1,10 @@
 // Delta_min.c
 
 /*
-Version 2.2
+Version 2.3
 
-This program goes through doubling intervals of n and computes the delta of
-omega (number of prime divisors) and pi(GPF) of the product n(n+1). 
+This program goes through doubling intervals of n and computes the difference (delta)
+between pi(GPF) of the product n(n+1), and its omega (number of prime divisors). 
 The prime index of the greatest prime factor, pi(GPF), is called the "Pidx"
 in this code. Because n and n+1 are coprime, the omega of their product is the sum of
 their individual omega values, and the Pidx of the product is the larger Pidx value of the
@@ -24,7 +24,7 @@ Pidx, but over many intervals, the minimum Pidx catches up, and then exceeds max
 
 A number with a complete set of prime factors, from its GPF down to 2, 
 is called "prime-complete". The sequence of integers, n, such that the product n(n+1) is
-prime-complete are listed in A141399 at OEIS.org. There are 28 integers
+prime-complete is listed in A141399 at OEIS.org. There are 28 integers
 in that sequence, ending in 633,555. For 633,555x633,556 omega and Pidx equal 8.
 Numbers are prime-complete if, and only if, their omega exactly equals their Pidx. 
 For the products of pairs of consecutive integers, omega grows aporximately 
@@ -40,7 +40,7 @@ and the A141399 sequence is terminated.
 This code evolved from a very siimple version written in Python in which the sympy module
 supplied the primefactors(n) function from which omega equals len(primefactors(n)) and Pidx
 equals primepi(primefactors(n)[-1]). However, to get to the intervals of interest (past n = 2^40)
-techniques are needed to speed up analysis. In this program, custom algorithms are used to 
+techniques were needed to speed up analysis. In this program, custom algorithms are used to 
 generate fast values for omega and Pidx when those values might displace either maximum omega
 or minimum Pidx.
 
@@ -51,12 +51,12 @@ continues on an increasing trend because the rate of increase of product Pidx is
 than product omega.
 
 To get a view beyond the very jumpy nature of Pidx and omega, we can look at the maximum value
-of omega and minimum value of Pidx over the interval. For early intervals max_Omega will be 
-greater than or equal to minPidx, so it is possible for the delta to be zero somewhere. However
-if an interfal has a min_Pidx greater than the max_Omega, then it is not possible that a
+of omega and minimum value of Pidx over the interval. For early intervals max_Omega can be 
+high enough to be equal to minPidx, so it is possible for the delta to be zero somewhere. However
+if an interval has a min_Pidx greater than the max_Omega, then it is not possible that a
 prime-complete product exists anywhere in that interval. When the faster growth trend of
-min_Pidx outruns max_Omega for all greater intervals (at about 2^45), no more prime-complete
-numbers are ever possible.
+min_Pidx outruns max_Omega for all greater intervals (at about n = 2^45), no more prime-complete
+n(n+1) are ever possible.
 
 The nature of the algorithm in this code gives accurate results for min_Delta and min_Pidx, but
 max_Omega has some uncertanty. This is because a portion of interval values will not have complete 
@@ -69,8 +69,11 @@ That just puts the crossover point to Pidx dominance a couple of intervals up th
 In all cases, max_Omaga is limited by the property that all integers must have an omega that
 is less than the count of primes in the first primorial number that is greater than the given
 integer. For example, if given the integer n = 123,456,789 we see that the first primorial 
-greater than n is at p_9# = 223,092,870 so omega(n) < 9. In this case the Pidx(n) is well
-above 9 (it's 529), so we do not need to know the exact omega(n) to know it is not prime-complete.
+greater than n(n+1) is at p_15# = 614,889,782,588,491,410 so omega(n(n+1)) < 15. 
+In this case the Pidx(n(n+1)) is well above 15 (it's 28693), so we do not need to know 
+the exact omega(n) to know the product, n(n+1), is not prime-complete. This shows the
+advantages of searching n, between the square roots of primorials, as n(n+1) is very close
+to n^2.
 
 At the start of the main routine the variable "verbose" is currently turned off. Set it
 to 1 to add statistic details to the printout.
@@ -86,7 +89,7 @@ but you may need:
     clang -O3 -std=c11 -Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -o Delta_min Delta_min.c -L/opt/homebrew/opt/libomp/lib -lomp -lm
 
 You can run it as:
-    ./Delta_min                         (starts at 1, runs 46 intervals, uses the first 100 prime divisors )
+    ./Delta_min                         (starts at 1, runs 40 intervals, uses the first 100 prime divisors )
     ./Delta_min  1000 1000 20 30        (starts at 1000, runs 20 doublings of size starting at 1000, uses 20 primes )
     ./Delta_min  10000000000000 1000000000000  1  300   (starts at 10T, runs 1 interval of size 1T, uses the first 300 prime divisors )
 
@@ -563,10 +566,14 @@ int main(int argc, char *argv[]) {
 
     int nthreads = omp_get_max_threads();
     char buf1[64];
-
     printf("\nDelta_min: Calculating the smallest difference between the prime number index of the greatest prime divisor\n");
-    printf("     of n(n+1) and the count of prime divisors of that consecutive integer product, over intervals of 2 x n.\n");
+    if (intervals == 1) {
+        printf("     of n(n+1) and the count of prime divisors of that consecutive integer product, over an interval.\n");
+    } else {
+        printf("     of n(n+1) and the count of prime divisors of that consecutive integer product, over doubling intervals.\n");
+    }
     printf("===============================================================================================================\n\n");
+    
     if (resuming) {
         printf("*** Resuming from checkpoint: starting at loop interval %d, n = %llu ***\n\n",
                first_interval, (unsigned long long)resume_n_stop);
@@ -653,7 +660,7 @@ int main(int argc, char *argv[]) {
 #endif
             for (uint64_t blk = 0; blk < num_blocks; blk++) {
                 uint64_t block_start = n_start + blk * block_n;
-                uint64_t block_end_excl = block_start + block_n;
+                uint64_t block_end_excl = block_start + block_n + 1; // Fix missed values at block boundaries.
                 if (block_end_excl > n_stop + 2) block_end_excl = n_stop + 2;
                 size_t len = (size_t)(block_end_excl - block_start);
                 po_result_t *arr = (po_result_t *)malloc(len * sizeof(po_result_t));
