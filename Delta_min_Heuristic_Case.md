@@ -123,19 +123,19 @@ $$
 and the usual estimate
 
 $$
-p_r\sim r\log r,
+p_r\sim r\log(r),
 $$
 
 we obtain, on the scale $n(n+1)\asymp P_r$,
 
 $$
-2\log n \asymp \log(P_r)\sim p_r\sim r\log r.
+2\log(n) \asymp \log(P_r)\sim p_r\sim r\log(r).
 $$
 
 Thus
 
 $$
-r\asymp \frac{2\log n}{\log\log n}.
+r\asymp \frac{2\log(n)}{\log(\log(n))}.
 $$
 
 This is the largest possible scale for $ω(N_2)$ in that primorial interval.
