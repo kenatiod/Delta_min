@@ -217,7 +217,7 @@ The heuristic in this note explains why those families should eventually become 
 the formal proof must show that they do, and exactly where. Størmer's theorem is key, here. 
 Whereas from Dickman we know that given any $p_r$-smooth number, there is, eventually, 
 going to be a greater number that is just as smooth, from Størmer we know that given 
-a consecutive pair, $n$ and $(n+1)$, there is no gaurentee that a greater pair exist 
+a consecutive pair, $n$ and $(n+1)$, there is no gaurantee that a greater pair exist 
 that are just as smooth. Because the set of such pairs is finite, Størmer tells us that for 
 every $r$ there must be a maximum pair of consecutive integers that are both $p_r$-smooth. That means 
 that for any given interval there has to be a minimum value of Pidx, below which, no consecutive integer
@@ -325,7 +325,7 @@ Observed maxOmega to minPidx growth over doubling intervals:
 
 If we let $x = \log_2(n)$, then theory-guided fit gives maxOmega growing roughly like $\frac{x}{\log(x)}$, while minPidx is better fit
 by a function with an $\frac{x^2}{\log(x)}$ component. In the observed data the fitted curves cross near
-$x=44$ ($n = 2^{44}$ or about 18 trillion), matching the point where minPidx begins to exceed maxOmega. Here here are the growth curve fit
+$x=44$ ($n = 2^{44}$ or about 18 trillion), matching the point where minPidx begins to exceed maxOmega. Here are the growth curve fit
 equations:
 
 $$
