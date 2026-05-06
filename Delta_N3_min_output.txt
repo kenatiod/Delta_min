@@ -1,6 +1,6 @@
 Delta_N3_min: Calculating the smallest difference between the prime number index of the greatest prime divisor
      of N_3 = n(n+1)(n+2) and the count of prime divisors of that consecutive integer product, over doubling intervals.
-=================================================================================================================
+==========================================================================================================================
 
 Tracking: max(Omega) if full factorization, exact min(Iota), and exact min(Iota-Omega) per interval.
 Omega(n(n+1)(n+2)) = Omega(n)+Omega(n+1)+Omega(n+2) - (1 if n is even, else 0).
@@ -47,3 +47,6 @@ Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
             34,359,738,368        21    39    18     40,427,034,348     21     41,704,979,953     39     40,427,034,348
             68,719,476,736        26    45    19     68,824,891,799     21    124,731,595,065     43    105,273,075,583
            137,438,953,472        10    27    17    138,982,582,998     21    254,772,473,240     27    138,982,582,998
+           274,877,906,944        27    47    20    290,181,228,335     21    547,825,055,349     47    290,181,228,335
+           549,755,813,888        25    46    21    550,049,761,644     22    835,962,726,389     46    768,026,327,418
+
