@@ -1,11 +1,12 @@
 Example Delta_min.c Output:
 
 
-Delta_min: Calculating the smallest difference between the prime number index of the greatest prime divisor
-     of n(n+1) and the count of prime divisors of that consecutive integer product, over intervals of 2 x n.
+Delta_min: Calculating the smallest difference between the prime number index of the greatest prime divisor of
+   n(n+1), iota, and the count of distinct prime divisors of that consecutive integer product, omega, 
+   over intervals of 2 x n.
 ===============================================================================================================
 
-Tracking: max(omega) if full factorization, exact min(iota), and exact min(iota-omega) per interval.
+Tracking: max(omega) if full factorization, exact min(iota), and exact min(delta = iota - omega) per interval.
 Intervals: 46, initial size 1
 Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
 
