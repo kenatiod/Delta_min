@@ -5,11 +5,11 @@ Delta_min: Calculating the smallest difference between the prime number index of
      of n(n+1) and the count of prime divisors of that consecutive integer product, over intervals of 2 x n.
 ===============================================================================================================
 
-Tracking: max(omega) if full factorization, exact min(Pidx), and exact min(Pidx-omega) per interval.
+Tracking: max(omega) if full factorization, exact min(iota), and exact min(iota-omega) per interval.
 Intervals: 46, initial size 1
 Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
 
-            Interval Start  minDelta = Pidx - omega      n@minDelta  maxOmega      n@maxOmega  minPidx        n@minPidx   
+            Interval Start  minDelta = iota - omega      n@minDelta  maxOmega      n@maxOmega  minIota        n@minIota   
 ---------------------------------------------------------------------------------------------------------------------------
                          1         0     1     1                  1      1                  1      1                  1     
                          2         0     2     2                  3      2                  4      2                  3      
@@ -61,7 +61,7 @@ Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
 
         23,620,771,158,594         6    21    15 27,186,110,385,993     18 35,092,837,058,279     18 31,887,350,832,896
 
-(At this point, minPidx passes maxOmega.)
+(At this point, minIota passes maxOmega.)
 
         35,184,372,088,832         8    25    17 37,857,444,282,944     18 43,967,499,670,380     22 35,468,858,564,775    
         43,980,465,111,040         9    21    12 51,950,861,713,575     18 52,749,817,940,105     21 51,950,861,713,575    
@@ -72,7 +72,7 @@ Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
         87,960,930,222,080         8    23    15 103,157,697,630,624    19 100,185,192,711,240    23 103,157,697,630,624 
        105,553,116,266,496         6    20    14 119,089,041,053,696    19 122,988,266,287,964    20 119,089,041,053,696  
 
-(At this point, minPidx passes r.) 
+(At this point, minIota passes r.) 
 
        123,145,302,310,912         8    22    14 129,738,112,529,025    19 138,198,879,506,610    22 129,738,112,529,025  
 
