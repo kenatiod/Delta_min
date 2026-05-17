@@ -114,4 +114,6 @@ Threads: 10, max prime index: 100 (p_100 = 541), margin: 3, block_n: 524288
 (Proceeding in steps of 2^45:)
 (Next search starts at 500,883,120,001,393)
 
+       571,251,864,179,057        11    28    17 599,006,887,764,999    18 600,485,581,303,244    28 599,006,887,764,999
+
 
