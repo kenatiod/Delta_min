@@ -1,4 +1,4 @@
-Delta_N4_min: Calculating the smallest difference between the prime number index of the greatest prime divisor
+Delta_min_N4: Calculating the smallest difference between the prime number index of the greatest prime divisor
      of N_4 = n(n+1)(n+2)(n+3) and the count of prime divisors of that consecutive integer product, over doubling intervals.
 ====================================================================================================================
 
