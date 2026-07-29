@@ -1,4 +1,4 @@
-Example Delta_min.c Output:
+Example Delta_min_N2.c Output:
 
 
 Delta_min: Calculating the smallest difference between the prime number index of the greatest prime divisor of
