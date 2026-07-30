@@ -74,7 +74,7 @@ A CSV file `delta_min_data.csv` is also written with the full results and a chec
 
 ## Background
 
-The primorial $P_r$ is the product of the first $r$ primes. For example, with $max_iota = 30$, the program can correctly cover $n(n+1)$ up to $P_30$=
+The primorial $P_r$ is the product of the first $r$ primes. For example, with $max_iota = 30$, the program can correctly cover $n(n+1)$ up to $P_{30}$=
 
 ```
 31,610,054,640,417,607,788,145,206,291,543,662,493,274,686,990
