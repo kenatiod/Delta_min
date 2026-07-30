@@ -87,7 +87,7 @@ The program can be used to find the list of the last $n$ values for each minimum
 Although Delta_min_N2.c was originally written to iterate through multiple intervals that double in size, single intervals may be run starting at any n value with any length by setting the doubling count to one. For example, to catch that $minimum=3$ value mentioned above, run:
                          ./Delta_min_N2 1109496723126 200000000000 1
 
-See the file "Delta_min_Heuristic_Case.md" for a more detailed explanation, and the file "Delta_min_N2_output.txt" for an output example to $n = 10^15$. The Python program "verify_delta_min.py" has been added to the repo so the Delta_min_N2_output.txt file can be automatically checked for correct factorizations producting values for omega and iota.
+See the file "Delta_min_Heuristic_Case.md" for a more detailed explanation, and the file "Delta_min_N2_output.txt" for an output example to $n = 10^{15}$. The Python program "verify_delta_min.py" has been added to the repo so the Delta_min_N2_output.txt file can be automatically checked for correct factorizations producting values for omega and iota.
 
 ## Primorial Intervals
 The examination of iota is particularly indicative when intervals are set to primorial numbers because of the limits placed on omega there mentioned above. Reaching high primorial intervals is difficult for $N_2$ because iota($N_2$) grows slowly and has large "dips" in early ranges. However for $N_3$ and $N_4$, the iota growth rate is much faster so even a simple Python program on a laptop can reach ranges where iota_min is consistently greater than $r$. Those Python programs and their outputs are included in the N3 and N4 subdirectories.
