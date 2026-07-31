@@ -41,9 +41,9 @@ o_np1, i_np1 = o_and_i(np1)
 o_np2, i_np2 = o_and_i(np2)
 
 print(f"\n\nFor Products, N4 = n(n+1)(n+2)(n+3), in Primorial Intervals, P_r <= N4 < P_(r+1):")
-print(f"---+-----------------+-----------------------+----------------------+----------------------+")
-print(f" r | n starts @      | Min_Delta =           | Max_Omega =          | Min_Iota =           |")
-print(f"---+-----------------+-----------------------+----------------------+----------------------+")
+print(f"---+-------------------+-------------------------+------------------------+------------------------+")
+print(f" r | n starts @        | Min_Delta =             | Max_Omega =            | Min_Iota =             |")
+print(f"---+-------------------+-------------------------+------------------------+------------------------+")
 
 
 for r in range(START_P_INTERVAL, END_P_INTERVAL+1):
@@ -74,8 +74,8 @@ for r in range(START_P_INTERVAL, END_P_INTERVAL+1):
         o_n, o_np1, o_np2 = o_np1, o_np2, o_np3
         i_n, i_np1, i_np2 = i_np1, i_np2, i_np3
 
-    print(f"{r:2} | {n_start:15,} |  {min_d:3,} @{n_at_min_delta:15,}" +
-          f" | {max_o:3,} @{n_at_max_omega:15,} | {min_i:3,} @{n_at_min_iota:15,} |")
+    print(f"{r:2} | {n_start:17,} |  {min_d:3,} @{n_at_min_delta:17,}" +
+          f" | {max_o:3,} @{n_at_max_omega:17,} | {min_i:3,} @{n_at_min_iota:17,} |")
 
 print(f"\nEnd of Program\n") 
 
